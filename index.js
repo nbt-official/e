@@ -14,12 +14,13 @@ function customDecrypt(b64str, key) {
 // GET endpoint: /get?url=<hi>
 app.get('/get', (req, res) => {
     const hi = req.query.url;
+    const key = req.query.key;
     if (!hi) return res.status(400).json({ error: "Missing 'url' query parameter" });
 
     try {
-        const decrypted = customDecrypt(hi, "5fjn6a3h5h6fg518jj4a7v3b4n");
+        const decrypted = customDecrypt(hi, key);
         const [manifestUrl, licenseUrl] = decrypted.split('!');
-        res.json({ manifestUrl, licenseUrl });
+        res.json({ decrypted });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Decryption failed" });
